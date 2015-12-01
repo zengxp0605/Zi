@@ -1,0 +1,13 @@
+{
+  "require": {
+	 "noahbuscher/macaw": "dev-master"
+  },
+  "autoload": {
+    "classmap": [
+      "vendor/zi",
+      "app/controllers",
+      "app/models"
+      
+    ]
+  }
+}
