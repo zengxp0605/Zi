@@ -1,17 +1,21 @@
 {
+  "name": "jason/zi",
+  "description": "My Personal Framework.",
+  "keywords": ["framework", "zi"],
+  "type": "project",
   "require": {
-	 "noahbuscher/macaw": "dev-master",
-         "illuminate/database": "*",
-         "filp/whoops": "*",
-	 "predis/predis": "*",
-          "monolog/monolog": "1.2.*"
+    "php": ">=5.4.0"
   },
   "autoload": {
     "classmap": [
-      "vendor/zi",
       "app/controllers",
       "app/models"
-      
     ]
-  }
+  },
+  "authors": [
+      {
+          "name": "Jason Zeng",
+          "email": "xiaoping_zeng@foxmail.com"
+      }
+  ]
 }
