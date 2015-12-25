@@ -12,7 +12,15 @@ use NoahBuscher\Macaw\Macaw;
 //Macaw::get('Home/help', 'HomeController@help');
 
 Macaw::get('(:all)', function($fu) {
-  echo 'Not Mactch<br>'.$fu;
- });
+    echo 'Not Mactch<br>' . $fu;
+});
+
+Macaw::$useAutoRoute = true;
+
+Macaw::$error_callback = function() {
+
+    throw new Exception("路由无匹配项 404 Not Found");
+};
+
 
 Macaw::dispatch();

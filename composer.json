@@ -1,6 +1,10 @@
 {
   "require": {
-	 "noahbuscher/macaw": "dev-master"
+	 "noahbuscher/macaw": "dev-master",
+         "illuminate/database": "*",
+         "filp/whoops": "*",
+	 "predis/predis": "*",
+          "monolog/monolog": "1.2.*"
   },
   "autoload": {
     "classmap": [

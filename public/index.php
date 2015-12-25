@@ -1,8 +1,13 @@
 <?php
-	define('ROOT_PATH',__DIR__ .'/../');
 
-	// Autoload 自动载入
-	$globalClassLoader = require '../vendor/autoload.php';
-//var_dump($autoload);
-	// 路由配置
-	require '../config/routes.php';
+
+// 定义 PUBLIC_PATH
+
+define('PUBLIC_PATH', __DIR__);
+
+// 启动器
+require PUBLIC_PATH . '/../bootstrap.php';
+
+
+// 路由配置
+require '../config/routes.php';

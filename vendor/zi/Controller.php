@@ -25,7 +25,7 @@ class Controller
 
   public function display($tpl = null){ 
 	switch($tpl){
-		//case false:  // ÕâÀï null ºÍ false µÈ¼Û?? ÎŞ·¨ÅĞ¶Ï²»Ê¹ÓÃÄ£°åµÄÇé¿ö...
+		//case false:  // è¿™é‡Œ null å’Œ false ç­‰ä»·?? æ— æ³•åˆ¤æ–­ä¸ä½¿ç”¨æ¨¡æ¿çš„æƒ…å†µ...
 		//	exit;
 		case true:
 		case null:	
@@ -41,7 +41,7 @@ class Controller
 	if(file_exists(ROOT_PATH . $path)){
 		include ROOT_PATH . $path;exit;
 	}else{
-		exit($path .' Ä£°åÎÄ¼ş²»´æÔÚ!');
+		exit($path .' æ¨¡æ¿æ–‡ä»¶ä¸å­˜åœ¨!');
 	}
 
   }

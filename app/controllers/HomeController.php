@@ -1,23 +1,34 @@
-<?php namespace App\Controllers;
-/**
-* HomeController
-*/
-class HomeController extends BaseController
-{
-	
-	public function index()
-  {
-    echo "<h1>Home index</h1>";
-	
-  }
-  public function home2()
-  {
-    echo "<h1>Home control success.</h1>";
-  }
-  public function help()
-  {
+<?php
 
-    echo "<h1>Home -- help.</h1>";
-	$this->redirect('test');
-  }
+namespace App\Controllers;
+
+use App\Model\Article;
+use Zi\View;
+use Zi\Db\Redis;
+
+/**
+ * HomeController
+ */
+class HomeController extends BaseController {
+
+    public function index() {
+        //Redis::set('key1','test111',10,'s');
+        echo Redis::get('test');
+        echo "<h1>Home index</h1>";
+        $this->detail = Article::first();
+    }
+
+    public function index2() {
+        $this->view = View::make('Home.index2')
+                ->with('article', Article::first())
+                ->withTitle('MFFC :-D')
+                ->withFuckMe('OK!');
+    }
+
+    public function help() {
+
+        echo "<h1>Home -- help.</h1>";
+        $this->redirect('test');
+    }
+
 }

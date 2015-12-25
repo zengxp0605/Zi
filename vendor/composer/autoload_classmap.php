@@ -6,8 +6,14 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'App\Controllers\BaseController' => $baseDir . '/app/controllers/BaseController.php',
-    'App\Controllers\HomeController' => $baseDir . '/app/controllers/HomeController.php',
-    'App\Controllers\IndexController' => $baseDir . '/app/controllers/IndexController.php',
+    'App\\Controllers\\BaseController' => $baseDir . '/app/controllers/BaseController.php',
+    'App\\Controllers\\HomeController' => $baseDir . '/app/controllers/HomeController.php',
+    'App\\Controllers\\IndexController' => $baseDir . '/app/controllers/IndexController.php',
+    'App\\Model\\Article' => $baseDir . '/app/models/Article.php',
+    'Whoops\\Module' => $vendorDir . '/filp/whoops/src/deprecated/Zend/Module.php',
+    'Whoops\\Provider\\Zend\\ExceptionStrategy' => $vendorDir . '/filp/whoops/src/deprecated/Zend/ExceptionStrategy.php',
+    'Whoops\\Provider\\Zend\\RouteNotFoundStrategy' => $vendorDir . '/filp/whoops/src/deprecated/Zend/RouteNotFoundStrategy.php',
     'Zi\\Controller' => $vendorDir . '/zi/Controller.php',
+    'Zi\\Db\\Redis' => $vendorDir . '/zi/Db/Redis.php',
+    'Zi\\View' => $vendorDir . '/zi/View.php',
 );
