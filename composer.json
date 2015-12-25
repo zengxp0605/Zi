@@ -4,7 +4,8 @@
   "keywords": ["framework", "zi"],
   "type": "project",
   "require": {
-    "php": ">=5.4.0"
+    "php": ">=5.4.0",
+    "jason/zi-framework":"1.1"
   },
   "autoload": {
     "classmap": [

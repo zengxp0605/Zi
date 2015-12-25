@@ -1,6 +1,8 @@
 <?php
 
-use NoahBuscher\Macaw\Macaw;
+use Zi\Controller;
+use Zi\Route;
+ $c = new Controller();
 
 //Macaw::error(function(){
 //	echo 'This routes is undefined.';exit;
@@ -11,16 +13,16 @@ use NoahBuscher\Macaw\Macaw;
 //Macaw::get('', 'HomeController@home');
 //Macaw::get('Home/help', 'HomeController@help');
 
-Macaw::get('(:all)', function($fu) {
+Route::get('(:all)', function($fu) {
     echo 'Not Mactch<br>' . $fu;
 });
 
-Macaw::$useAutoRoute = true;
+Route::$useAutoRoute = true;
 
-Macaw::$error_callback = function() {
+Route::$error_callback = function() {
 
     throw new Exception("路由无匹配项 404 Not Found");
 };
 
 
-Macaw::dispatch();
+Route::dispatch();
