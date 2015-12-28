@@ -13,7 +13,7 @@ class HomeController extends BaseController {
 
     public function index() {
         //Redis::set('key1','test111',10,'s');
-        echo Redis::get('test');
+        //echo Redis::get('test');
         echo "<h1>Home index</h1>";
         $this->detail = Article::first();
     }
@@ -25,9 +25,12 @@ class HomeController extends BaseController {
                 ->withFuckMe('OK!');
     }
 
-    public function help() {
+    public function help($id ,$test = 'ttt',$ng='') {
+        
 
         echo "<h1>Home -- help.</h1>";
+                var_dump($id,$test,$ng);
+                echo  '<hr/>';
         $this->redirect('test');
     }
 
