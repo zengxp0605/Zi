@@ -1,4 +1,0 @@
-执行日期：2015-12-28 21:19:16
-Class App\Controllers\TttController does not exist
-执行日期：2015-12-28 21:19:17
-Class App\Controllers\TttController does not exist
