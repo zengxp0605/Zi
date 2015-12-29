@@ -2,13 +2,12 @@
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-header('Content-type:text/html;charset=utf-8;');
 
-define('ROOT_PATH', __DIR__ . '/');
 define('BASE_PATH', __DIR__ . '/');
+define('CACHE_PATH', __DIR__ . '/data/runtime/cache/');
 
 // Autoload 自动载入
-$globalClassLoader = require ROOT_PATH . 'vendor/autoload.php';
+require BASE_PATH . 'vendor/autoload.php';
 
 // Eloquent ORM
 //$capsule = new Capsule;

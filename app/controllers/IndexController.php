@@ -22,10 +22,12 @@ class IndexController extends BaseController {
         //Log::debug($t);
         // echo $this->id;
         echo $this->__CONTROLLER__ . '----' . $this->__ACTION__;
+        return false;
     }
 
     public function test() {
-        echo  'index/test';
+        //echo  'index/test';
+      
     }
 
 }
