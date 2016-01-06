@@ -21,7 +21,7 @@ class HomeController extends BaseController {
 
     public function index2() {
         $this->view = View::make('Home.index2')
-                ->with('article', Article::first())
+             // ->with('article', Article::first())
                 ->withTitle('MFFC :-D')
                 ->withFuckMe('OK!');
     }
