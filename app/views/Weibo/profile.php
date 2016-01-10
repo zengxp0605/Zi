@@ -1,16 +1,17 @@
 <?php require_once $this->__VAP__ . 'Weibo/__header.php'; ?>
-            <h2 class="username">test</h2>
-            <a href="follow.php?uid=1&f=1" class="button">关注ta</a>
+<h2 class="username"><?= $this->proUsername ?></h2>
+<a href="/Weibo/follow?userid=<?= $this->proUserid ?>&isFollowed=<?= intval($this->isFollowed) ?>" class="button">
+    <?= $this->isFollowed ? '取消关注' : '关注ta' ?>
+</a>
+<?php foreach ($this->myPostids as $k => $postid): 
+    $post = $this->redis->hGetAll("posts:{$postid}");
+    ?>
+    <div class="post">
+        <a class="username" href="profile.php?userid=<?=$post['userid']?>"><?=  isset($post['username']) ? $post['username'] : 'not set'?></a> 
+        <?=$post['content']?>
+        <br>
+        <i><?=$post['time']?> 分钟前 通过 web发布</i>
+    </div>
+<?php endforeach; ?>
 
-            <div class="post">
-                <a class="username" href="profile.php?u=test">test</a> 
-                world<br>
-                <i>11 分钟前 通过 web发布</i>
-            </div>
-
-            <div class="post">
-                <a class="username" href="profile.php?u=test">test</a>
-                hello<br>
-                <i>22 分钟前 通过 web发布</i>
-            </div>
 <?php require_once $this->__VAP__ . 'Weibo/__footer.php'; ?>
