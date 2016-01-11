@@ -11,7 +11,7 @@ use Predis\Client;
  * WeiboController
  * redis 完成的仿微博项目
  */
-class WeiboController extends BaseController {
+class WeiboController_bak extends BaseController {
 
     public function __construct() {
 
@@ -24,81 +24,11 @@ class WeiboController extends BaseController {
             $this->redirect('Weibo/index');
         $this->fansCount = $this->redis->sCard("following:userid:{$this->userid}");
         $this->followerCount = $this->redis->sCard("follower:userid:{$this->userid}");
-        $this->postids = array();
-        /**
-         *  拉模型获取自己的动态, 遍历自己的关注,获取上次拉取的最大的postid,从关注用户的微博中
-         * 拿到比这个postid大的id
-         */
-        $this->_pullMyPostids();
-        /**
-         * ---------------------------------------------------------------------
-         *    // 推模型时直接获取自己的信息
-         *      // 获取自己的动态,包括自己的和自己关注的用户的,按照时间顺序排序,或者说按照postid大小排序  
-         * ---------------------------------------------------------------------
-         */
+
+        // 获取自己的动态,包括自己的和自己关注的用户的,按照时间顺序排序,或者说按照postid大小排序
         $this->postids = $this->redis->sort("latest_post:userid:{$this->userid}", ['sort' => 'desc']);
 
-        //var_dump($this->postids);
-    }
-
-    /**
-     * 拉取自己的动态
-     */
-    private function _pullMyPostids() {
-        $lastPullid = $this->redis->get("user:userid:{$this->userid}:last_pull_postid");
-        $lastPullTime = $this->redis->get("user:userid:{$this->userid}:last_pull_time");
-        if ($lastPullTime && $lastPullTime > (time() - 60)) {
-            echo '<br/>---------1分钟内不重复刷新----------<hr/>';
-            return;
-        }
-        if (!$lastPullid)
-            $lastPullid = 0;
-        $largestPostid = $this->redis->get("global:postid");
-        $postids = array();
-        $followerIds = $this->redis->sMembers("follower:userid:{$this->userid}");
-        $followerIds[] = $this->userid; // 同时获取自己的
-        foreach ($followerIds as $k => $uid) {
-            // 获取该用户的微博,postid 需要大于 $lastpullid , 小于 global:postid
-            $postids = array_merge($postids, $this->redis->zRangeByScore("user_post:{$uid}", $lastPullid, $largestPostid, ['limit' => [0, 19]]));
-        }
-
-//        $test = array_combine($postids, $postids);
-//         $this->redis->zAdd("test3", $test);
-//        var_dump($test);
-//         echo '<br />-----------------<hr />';
-        if (!empty($postids)) {
-            //保存微博id到自己的微博动态 有序集合,并更新当前用户 last_pull_postid
-            $tmp = array_combine($postids, $postids); // 将数组键值置为postid
-            $this->redis->zAdd("latest_post:userid:{$this->userid}", $tmp);
-            // 保证长度最长不超过1000条,这里模拟使用10条
-            if (($count = ($this->redis->zCard("latest_post:userid:{$this->userid}") - 10)) > 0) {
-                $this->redis->zRemRangeByRank("latest_post:userid:{$this->userid}", 0, $count - 1);
-            }
-            $this->redis->set("user:userid:{$this->userid}:last_pull_postid", max($postids) + 1);
-            var_dump($postids);
-            echo '<br />---------以上是新拉取的postid-------<hr />';
-        } else {
-            echo '<br />---------没有最新的动态-------<hr />';
-        }
-        //更新拉取的最新时间
-        $this->redis->set("user:userid:{$this->userid}:last_pull_time", time());
-    }
-
-    public function test() {
-//        $redis = new \Redis();
-//        $redis->connect('127.0.0.1', 6379);
-//        $redis->zadd('myset',11,'one');
-//                $redis->zadd('myset',22,'two');
-//        $redis->zadd('myset',33,'three');
-//         var_dump($redis->zrange('myset2',0,-1));
-        for ($i = 10; $i <= 15; $i++) {
-            $test[$i] = $i;
-        }
-
-        $this->redis->zadd('myset2', $test);
-
-        var_dump($this->redis->zrange('myset2', 0, -1));
-        return false;
+        var_dump($this->postids);
     }
 
     public function index() {
@@ -147,31 +77,21 @@ class WeiboController extends BaseController {
         $postid = $this->redis->incr('global:postid');
 
         $this->redis->hMset("posts:{$postid}", array('time' => time(), 'userid' => $this->userid, 'username' => $this->username, 'content' => $content));
-        //维护用户自己的微博  有序集合,仅保存最新的20条,需要获取更多时读取mysql数据库
-        $this->redis->zAdd("user_post:{$this->userid}", $postid, $postid);
-        if ($this->redis->zCard("user_post:{$this->userid}") > 19) {
-            // 删除id最小的那条微博
-            $this->redis->zRemRangeByRank("user_post:{$this->userid}", 0, 0);
-        }
-        //刷新最新拉取的时间,否则无法实时看到自己最新发布的微博
-        $this->redis->del("user:userid:{$this->userid}:last_pull_time");
+        //维护用户自己的微博 集合
+        $this->redis->sAdd("user_post:{$this->userid}", $postid);
 
         // 向自己的粉丝们推送这条微博
-        //$this->_pushPost($postid);
+        $this->_pushPost($postid);
+
         // 维护最新的微博,全员可见,热点
         $this->redis->lPush("latest_post", $postid);
         if ($this->redis->lLen("latest_post") > 50)
             $this->redis->rPop("latest_post");
 
 //        var_dump($r, $this->redis->hGetAll("posts:{$postid}"));
-        //$this->success('微博发布成功', '/Weibo/home');
-        $this->redirect('Weibo/home');
+        $this->success('微博发布成功', '/Weibo/home');
     }
 
-    /**
-     *  使用推模型时,向所有自己的粉丝推送最新发送的那条微博
-     * @param type $postid
-     */
     private function _pushPost($postid) {
         $fans = $this->redis->sMembers("following:userid:{$this->userid}");
         $fans[] = $this->userid; // 同时向自己推送一条
